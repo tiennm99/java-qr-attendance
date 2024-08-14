@@ -43,6 +43,8 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.projectlombok:lombok")
 
+    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.google.zxing:javase:3.5.3")
     implementation("com.ngrok:ngrok-java:${ngrokVersion}")
     implementation("com.ngrok:ngrok-java-native:${ngrokVersion}:${osdetector.classifier}")
     implementation("com.vaadin:vaadin-spring-boot-starter")
