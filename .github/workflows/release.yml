@@ -22,7 +22,7 @@ jobs:
           gradle-version: 8.8
 
       - name: Build with Gradle
-        run: gradle clean build -Pvaadin.productionMode --stacktrace
+        run: gradle clean build --stacktrace
 
       - name: Release
         uses: softprops/action-gh-release@v1
