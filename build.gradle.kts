@@ -5,9 +5,10 @@ plugins {
     id("com.google.osdetector") version "1.7.3"
     id("io.spring.dependency-management") version "1.1.6"
     id("org.springframework.boot") version "3.3.2"
+    id("com.vaadin") version "24.4.8"
 }
 
-var ngrokVersion = "1.1.0"
+val ngrokVersion = "1.1.0"
 val vaadinVersion by extra("24.4.8")
 val springCloudVersion by extra("2023.0.3")
 
@@ -67,7 +68,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/tiennm99/java-qr-attendance")
+            url = uri("https://maven.pkg.github.com/${System.getenv("GITHUB_REPOSITORY")}")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
@@ -75,34 +76,13 @@ publishing {
         }
     }
     publications {
-        register("mavenJava", MavenPublication::class) {
+        create<MavenPublication>("gpr") {
             from(components["java"])
-            versionMapping {
-                usage("java-api") {
-                    fromResolutionOf("runtimeClasspath")
-                }
-                usage("java-runtime") {
-                    fromResolutionResult()
-                }
-            }
-            pom {
-                name.set("java-qr-attendance")
-                description.set("java-qr-attendance")
-                url.set("https://tiennm99.github.io/")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("tiennm99")
-                        name.set("miti99")
-                        email.set("tiennm99@outlook.com")
-                    }
-                }
-            }
         }
     }
+}
+
+tasks.withType<JavaCompile> {
+    sourceCompatibility = JavaVersion.VERSION_21.toString()
+    targetCompatibility = JavaVersion.VERSION_21.toString()
 }
