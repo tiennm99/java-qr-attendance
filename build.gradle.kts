@@ -1,13 +1,9 @@
 plugins {
     java
     idea
-    id("com.google.osdetector") version "1.7.3"
     id("io.spring.dependency-management") version "1.1.6"
     id("org.springframework.boot") version "3.3.2"
 }
-
-val ngrokVersion = "1.1.0"
-val springCloudVersion by extra("2023.0.3")
 
 group = "io.github.tiennm99"
 version = "0.0.1-SNAPSHOT"
@@ -41,8 +37,8 @@ dependencies {
 
     implementation("com.google.zxing:core:3.5.3")
     implementation("com.google.zxing:javase:3.5.3")
-    implementation("com.ngrok:ngrok-java:${ngrokVersion}")
-    implementation("com.ngrok:ngrok-java-native:${ngrokVersion}:${osdetector.classifier}")
+    implementation("com.ngrok:ngrok-java:1.1.0")
+    implementation("com.ngrok:ngrok-java-native:1.1.0:windows-x86_64")
     implementation("org.apache.poi:poi-ooxml:5.3.0")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -50,12 +46,6 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
-    }
 }
 
 tasks.withType<Test> {
