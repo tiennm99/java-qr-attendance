@@ -1,16 +1,14 @@
 package io.github.tiennm99.qrattendance;
 
-import com.vaadin.flow.spring.annotation.EnableVaadin;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.component.page.AppShellConfigurator;
 
 @SpringBootApplication
-@EnableVaadin
-public class QRAttendanceApplication implements AppShellConfigurator {
+@Slf4j
+public class QRAttendanceApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(QRAttendanceApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(QRAttendanceApplication.class, args);
+  }
 }

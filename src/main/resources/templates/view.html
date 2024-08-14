@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>View</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <script>
+    function getLocationAndSubmit() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendLocation);
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function sendLocation(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      const studentId = document.getElementById("studentId").value;
+      const userAgent = navigator.userAgent;
+
+      fetch('/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `studentId=${studentId}&latitude=${latitude}&longitude=${longitude}`
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert(result);
+      });
+    }
+  </script>
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="text-center">Submit Your Information</h1>
+  <form onsubmit="event.preventDefault(); getLocationAndSubmit();" class="text-center">
+    <div class="form-group">
+      <label for="studentId">Student ID:</label>
+      <input type="text" id="studentId" name="studentId" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+</body>
+</html>

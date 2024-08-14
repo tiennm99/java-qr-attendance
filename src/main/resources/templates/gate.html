@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Gate</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendLocation);
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function sendLocation(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      fetch('/check-location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `latitude=${latitude}&longitude=${longitude}`
+      })
+      .then(response => response.text())
+      .then(result => {
+        if (result === 'rejected') {
+          alert('You are rejected due to being more than 1km away from the server location.');
+        } else {
+          window.location.href = '/view';
+        }
+      });
+    }
+  </script>
+</head>
+<body onload="getLocation()">
+<div class="container text-center mt-5">
+  <h1>Gate</h1>
+</div>
+</body>
+</html>

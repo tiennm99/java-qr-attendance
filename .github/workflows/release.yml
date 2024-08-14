@@ -1,10 +1,7 @@
-name: Build and Release Vaadin Project
-
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - 'v*'
 
 jobs:
   build-and-release:
@@ -29,6 +26,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: build/libs/*
         env:

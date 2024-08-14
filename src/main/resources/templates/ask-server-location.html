@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Map</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <style>
+    #map {
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <div id="map" class="mb-3"></div>
+  <form id="locationForm" th:action="@{/set-server-location}" method="post" class="text-center">
+    <input type="hidden" id="lat" name="lat"/>
+    <input type="hidden" id="lon" name="lon"/>
+    <button type="submit" id="confirmBtn" class="btn btn-primary" disabled>Confirm Location</button>
+  </form>
+</div>
+
+<script th:inline="javascript">
+  var map = L.map('map').setView([0, 0], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  var marker;
+
+  function onLocationFound(e) {
+    var radius = e.accuracy / 2;
+    if (marker) {
+      map.removeLayer(marker);
+    }
+    marker = L.marker(e.latlng).addTo(map);
+    map.setView(e.latlng, 13);
+    document.getElementById('confirmBtn').disabled = false;
+    updateForm(e.latlng);
+  }
+
+  function onLocationError(e) {
+    alert(e.message);
+  }
+
+  function updateForm(latlng) {
+    document.getElementById('lat').value = latlng.lat;
+    document.getElementById('lon').value = latlng.lng;
+  }
+
+  map.on('locationfound', onLocationFound);
+  map.on('locationerror', onLocationError);
+  map.on('click', function (e) {
+    onLocationFound(e);
+  });
+
+  map.locate({setView: true, maxZoom: 16});
+</script>
+</body>
+</html>

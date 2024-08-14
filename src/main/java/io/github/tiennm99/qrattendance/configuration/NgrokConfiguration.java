@@ -1,4 +1,4 @@
-package io.github.tiennm99.qrattendance.config;
+package io.github.tiennm99.qrattendance.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
