@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Manage</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    #submissions {
+      max-height: 50vh;
+      overflow-y: scroll;
+    }
+
+    .qr-code {
+      width: 256px;
+      height: auto;
+    }
+
+    .highlight-red {
+      color: red !important;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #f8f9fa;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+      background-color: #e9ecef;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      function displaySubmission(submission) {
+        var submissionsTable = document.getElementById('submissionsTable');
+        var newRow = submissionsTable.insertRow();
+        var highlightClass = (submission.duplicatedWith != '' || submission.tooFarFromServer)
+            ? 'highlight-red' : '';
+        newRow.innerHTML = `
+          <td class="${highlightClass}">${submission.studentId}</td>
+          <td class="${highlightClass}">${submission.latitude}</td>
+          <td class="${highlightClass}">${submission.longitude}</td>
+          <td class="${highlightClass}">${submission.ip}</td>
+          <td class="${highlightClass}">${submission.userAgent}</td>
+          <td class="${highlightClass}">${submission.duplicatedWith}</td>
+          <td class="${highlightClass}">${submission.tooFarFromServer}</td>
+        `;
+      }
+
+      function refreshSubmissions() {
+        fetch('/submissions')
+        .then(response => response.json())
+        .then(data => {
+          var submissionsTable = document.getElementById('submissionsTable');
+          submissionsTable.innerHTML = '';
+          data.forEach(submission => displaySubmission(submission));
+          var submissionsDiv = document.getElementById('submissions');
+          submissionsDiv.scrollTop = submissionsDiv.scrollHeight;
+        });
+      }
+
+      setInterval(refreshSubmissions, 5000);
+    });
+  </script>
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="text-center">Manage</h1>
+  <div class="text-center mb-3">
+    <img th:src="'data:image/png;base64,' + ${qrCode}" alt="QR Code" class="qr-code"/>
+  </div>
+  <div id="submissions" class="mb-3">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>IP</th>
+        <th>User Agent</th>
+        <th>Duplicated With</th>
+        <th>Too Far From Server</th>
+      </tr>
+      </thead>
+      <tbody id="submissionsTable">
+      <tr th:each="submission : ${submissions}"
+          th:class="${(submission.duplicatedWith != '' or submission.tooFarFromServer) ? 'highlight-red' : ''}">
+        <td th:text="${submission.studentId}"></td>
+        <td th:text="${submission.latitude}"></td>
+        <td th:text="${submission.longitude}"></td>
+        <td th:text="${submission.ip}"></td>
+        <td th:text="${submission.userAgent}"></td>
+        <td th:text="${submission.duplicatedWith}"></td>
+        <td th:text="${submission.tooFarFromServer}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center">
+    <button class="btn btn-primary" onclick="exportSubmissions()">Export Submissions</button>
+  </div>
+</div>
+<script>
+  function exportSubmissions() {
+    fetch('/export-submissions', {
+      method: 'POST'
+    })
+    .then(response => response.text())
+    .then(message => alert(message))
+    .catch(error => console.error('Error:', error));
+  }
+</script>
+</body>
+</html>
