@@ -1,0 +1,11 @@
+logging:
+  threshold:
+    console: DEBUG
+ngrok:
+  enabled: true
+  authToken: 2K5G2NPRiax2WGJhpaiZAq0PkI6_3ANRF7UohGvB3zejMSxW8
+server:
+  port: 8080
+spring:
+  application:
+    name: java-qr-attendance
