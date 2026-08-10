@@ -5,8 +5,21 @@ Just a QR code attendance demo app for my sister's representation, but written i
 ## How to run
 
 1. Download java 21 from [here](https://www.oracle.com/java/technologies/downloads/#jdk21-windows)
-2. Download the .jar file from the releases page
-3. Run the .jar file with `java -jar <filename>.jar`
+2. Set your ngrok authtoken in `src/main/resources/application.yml` (get one at
+   [dashboard.ngrok.com](https://dashboard.ngrok.com)), or disable the tunnel with
+   `ngrok.enabled: false`
+3. Run with `gradlew bootRun`, or build a .jar with `gradlew build` and run it
+   with `java -jar build/libs/<filename>.jar`
+
+Note: the bundled ngrok native library is Windows x86_64 only; on other platforms
+run with `ngrok.enabled: false`.
+
+## History
+
+This repository also holds the original Python (Flask + Excel) implementation
+that this Java app replaced. Its files were removed in the "Clear and rewrite"
+commit, but its full history is preserved — check out any commit before that
+one to browse or run it.
 
 ## Note
 
